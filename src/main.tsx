@@ -1,3 +1,4 @@
+import React from 'react';
 import ReactDOM from 'react-dom/client'
 import App from './App.tsx'
 import './index.css'
@@ -11,7 +12,7 @@ const auth0clientId = "1bXreGSAUibtBfUZFgNjmbIVCCEp9Nrq"
 // const domain="dev-vyjc0kly7c71ipza.us.auth0.com"
 // const auth0clientId= "8O4YgynwC0WAo6OBkcsD3hne5zjeMbYl"
 ReactDOM.createRoot(document.getElementById('root')!).render(
-  // <React.StrictMode>
+  <React.StrictMode>
     <Auth0Provider
       domain={domain}
       clientId={auth0clientId}
@@ -26,5 +27,5 @@ ReactDOM.createRoot(document.getElementById('root')!).render(
       </GoogleOAuthProvider>
     </Auth0Provider>
 
-  // </React.StrictMode>,
+   </React.StrictMode>
 )
