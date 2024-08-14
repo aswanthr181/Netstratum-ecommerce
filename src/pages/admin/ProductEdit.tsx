@@ -13,7 +13,7 @@ function ProductEdit() {
       <AdminNavbar/>
       <ProductForm id={productId}/>
      </div>
-    </>
+    </> 
 
   )
 }
