@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react"
-import { ProductType } from "../../Types/productType"
+import { ProductType } from "../../Types/allType"
 import axios from "axios"
 import { Chart } from "chart.js/auto"
 import { Bar, Pie } from 'react-chartjs-2'
@@ -12,7 +12,7 @@ Chart.register(CategoryScale, ChartDataLabels)
 function Dashboard() {
     const [product, setProduct] = useState<ProductType[]>([])
     const [categorys, setCategorys] = useState<{ [key: string]: number }>({})
-    const [lineOption, setLineOption] = useState("PRODUCT PRICE")
+    const [lineOption, setLineOption] = useState<string>("PRODUCT PRICE")
     const [loading, setLoading] = useState(true);
 
     const handleType = (e: any) => {

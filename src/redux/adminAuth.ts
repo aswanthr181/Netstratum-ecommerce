@@ -1,10 +1,11 @@
 import { createSlice } from "@reduxjs/toolkit";
+import { adminDataType } from "../Types/allType";
 
 interface AdminAuthState {
-    adminData: string;
+    adminData: adminDataType|null;
 }
 const InitialState: AdminAuthState={
-    adminData:''
+    adminData:null
 }
 
 const adminAuth=createSlice({

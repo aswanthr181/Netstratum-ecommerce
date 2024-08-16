@@ -6,12 +6,14 @@ import Swal from 'sweetalert2'
 import Form from "./Form"
 
 
-function ProductForm({ id }: any) {
+function ProductForm({ id }:any ) {
+    console.log(typeof(id));
+     typeof(id)
     const [loading, setLoading] = useState<boolean>(true)
-    const [category, setCategory] = useState<string>()
-    const [title, setTitle] = useState<string>()
-    const [price, setPrice] = useState<number>()
-    const [description, setDescription] = useState<string>()
+    const [category, setCategory] = useState<string>('')
+    const [title, setTitle] = useState<string>('')
+    const [price, setPrice] = useState<number>(0)
+    const [description, setDescription] = useState<string>('')
     const [image, setImage] = useState<any>()
     // const [page,setPage]=useState<number>(1)
     // const [productData, setProductData] = useState<any>()

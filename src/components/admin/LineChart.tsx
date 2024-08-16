@@ -71,9 +71,12 @@ import { Line } from "react-chartjs-2";
 import { LinearScale } from "chart.js/auto";
 import { Chart } from "chart.js/auto";
 Chart.register(LinearScale);
-import { ProductType } from "../../Types/productType";
-
-function LineChart({ products, lineOption }) {
+import { ProductType } from "../../Types/allType";
+interface LineChartProps {
+    products: ProductType[];
+    lineOption:string
+  }
+function LineChart({ products, lineOption }:LineChartProps) {
     const data = {
         labels: products.map((product: ProductType) => `${product.id}`),
         datasets: [
@@ -107,7 +110,7 @@ function LineChart({ products, lineOption }) {
         },
         elements: {
             line: {
-                tension: 1,
+                tension: 0.1,
             },
         },
         plugins: {
@@ -117,7 +120,7 @@ function LineChart({ products, lineOption }) {
             },
             tooltip: {
                 callbacks: {
-                    label: function (tooltipItem) {
+                    label: function (tooltipItem:any) {
                         const product = products[tooltipItem.dataIndex];
                         return `${product.title}: ₹${product.price}`;
                     },

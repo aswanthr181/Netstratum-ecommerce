@@ -1,12 +1,13 @@
 import { Chart } from "chart.js";
 import { CategoryScale } from 'chart.js/auto'
-import { useState } from "react";
 import { Bar } from "react-chartjs-2";
-import { ProductType } from "../../Types/productType";
+import { ProductType } from "../../Types/allType";
 Chart.register(CategoryScale)
 
-
-function Chart1({ products }) {
+interface Chart1Props {
+    products: ProductType[];
+  }
+function Chart1({ products }:Chart1Props) {
     console.log(products[0].title);
 
     const groupByCategoryAverage = (products: any) => {

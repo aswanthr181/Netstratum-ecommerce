@@ -1,19 +1,35 @@
 import { RxCross1 } from "react-icons/rx";
 import { useDispatch, useSelector } from "react-redux";
 import { decrementQuantity, incrementQuantity, removeFromCart } from "../../../redux/cart";
+import { useState } from "react";
+import { AiFillDelete } from "react-icons/ai";
+
+import Modal from "../Modal";
 
 function CartCard({ item }: { item: any }) {
+    const [isModalOpen, setIsModalOpen] = useState<boolean>(false)
+    const modalData={
+        text:"Do you really want to remove this Product? This process cannot be undonee ",
+        action:"REMOVE"
+    }
 
-    const dispatch=useDispatch()
-    const{userData}=useSelector((state:any)=>state.userAuth)
+    const dispatch = useDispatch()
+    const { userData } = useSelector((state: any) => state.userAuth)
 
     const handleQuantityUpdate = (task: number) => {
-        task>0?
-        dispatch(incrementQuantity({user:userData.email,productId:item.id})):dispatch(decrementQuantity({user:userData.email,productId:item.id}))  
+        task > 0 ?
+            dispatch(incrementQuantity({ user: userData.email, productId: item.id })) : dispatch(decrementQuantity({ user: userData.email, productId: item.id }))
     }
 
     const handleRomove = () => {
-        dispatch(removeFromCart({user:userData.email,productId:item.id}))
+        setIsModalOpen(true)
+        // dispatch(removeFromCart({user:userData.email,productId:item.id}))
+    }
+    const handleAction = () => {
+        dispatch(removeFromCart({ user: userData.email, productId: item.id }))
+        setIsModalOpen(true)
+
+
     }
 
     return (
@@ -36,20 +52,23 @@ function CartCard({ item }: { item: any }) {
 
                         </div>
                         <div className="flex items-center gap-1 border-gray-100">
-                        <div className={`${item.quantity > 1 ? '' : ''}`}>
-                                <button  onClick={() =>item.quantity > 1 && handleQuantityUpdate(-1)} className={`cursor-pointer rounded-l bg-gray-100 py-1 px-3.5 duration-100 ${item.quantity > 1?'hover:bg-blue-500 hover:text-blue-50':''} `}> - </button>
+                            <div className={`${item.quantity > 1 ? '' : ''}`}>
+                                <button onClick={() => item.quantity > 1 && handleQuantityUpdate(-1)} className={`cursor-pointer rounded-l bg-gray-100 py-1 px-3.5 duration-100 ${item.quantity > 1 ? 'hover:bg-blue-500 hover:text-blue-50' : ''} `}> - </button>
                             </div><button onClick={() => handleQuantityUpdate(1)} className="cursor-pointer rounded-r bg-gray-100 py-1 px-3 duration-100 hover:bg-blue-500 hover:text-blue-50"> + </button>
                         </div>
                     </div>
 
                     <div className="absolute top-0 right-0 flex sm:bottom-0 sm:top-auto">
                         <button onClick={handleRomove} type="button" className="flex rounded p-2 text-center text-gray-500 transition-all duration-200 ease-in-out focus:shadow hover:text-gray-900">
-                            
+
                             <RxCross1 />
                         </button>
                     </div>
                 </div>
             </li>
+            {isModalOpen && (
+                <Modal setIsModalOpen={setIsModalOpen} handleAction={handleAction} modalData={modalData} icon={<AiFillDelete size={40} color="red" />} />
+            )}
         </>
 
     )

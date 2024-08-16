@@ -3,87 +3,71 @@ import axios from "axios"
 import { useEffect, useState } from "react"
 import { ClipLoader } from "react-spinners"
 import ProductCard from "./Cards/ProductCard"
+import { ProductType } from "../../Types/allType"
+import { productApi } from "../../constants/api"
 
 function Products({ ...data }) {
-    const [loading, setLoading] = useState<any>()
-    const [products, setProducts] = useState<any[]>([])
-    const [categorys, setCategorys] = useState<string[]>(['ALL PRODUCTS'])
-    const [filterProduct, setFilterProduct] = useState<any[]>([])
+    const [loading, setLoading] = useState<boolean>(true)
+    const [products, setProducts] = useState<ProductType[]>([])
+    const [categorys, setCategorys] = useState<string[]>([''])
+    const [filterProduct, setFilterProduct] = useState<ProductType[]>([])
     const [search, setSearch] = useState<string>('')
-    const [category, setCategory] = useState<string>('')
+    const [category, setCategory] = useState<string>('ALL PRODUCTS')
 
-
-    // console.log(data);
-
-    // const navigate = useNavigate()
 
     useEffect(() => {
         setLoading(true)
-        axios.get('https://fakestoreapi.com/products').then((result) => {
-            console.log(result.data);
-
+        axios.get(`${productApi}`).then((result) => {
             setProducts(result.data)
             setFilterProduct(result.data)
             let categorySet = new Set<string>()
-            result.data.forEach((product: any) => {
+            result.data.forEach((product: ProductType) => {
                 categorySet.add(product.category)
             })
             setCategorys([...categorySet])
-            setCategory('ALL PRODUCTS')
             setLoading(false)
         })
     }, [])
 
-
-
     const handleFilter = (category: string) => {
-        console.log(category)
-        console.log('allll prdttttttttttt', products);
-        let categoryProduct: any[] = []
 
-        category === 'ALL PRODUCTS' ?
+        if (category === 'ALL PRODUCTS') {
             setFilterProduct([...products])
-            : (
-                categoryProduct = products.filter((product: any) => {
-                    return product.category === category
-                })
+        } else {
+            let categoryProduct: ProductType[] = []
+            categoryProduct = products.filter((product: ProductType) => {
+                return product.category === category
+            })
 
-            )
-
-        setCategory(category)
-        setFilterProduct([...categoryProduct])
-        // if (category === 'ALL PRODUCTS') {
-        //     setFilterProduct([...products])
-        // } else {
-        //     let categoryProduct: any[] = []
-        //     categoryProduct = products.filter((product: any) => {
-        //         return product.category === category
-        //     })
-
-        //     setFilterProduct([...categoryProduct])
-        // }
+            setFilterProduct([...categoryProduct])
+        }
         setCategory(category)
     }
 
 
     const handleSearch = (searchText: string) => {
-        console.log('search111', searchText);
 
         setSearch(searchText)
-        let searchProduct: any[] = []
-        searchProduct = filterProduct.filter((product: any) => {
+        let searchProduct: ProductType[] = []
+        searchProduct = filterProduct.filter((product: ProductType) => {
             return product.title.toLowerCase().includes(searchText.toLowerCase())
         })
         setFilterProduct([...searchProduct])
     }
 
 
-    const handlePriceFilter = (e: any) => {
-        const sort = e.target.value
-        const sortedProduct = [...filterProduct]
-        sort > 0 ?
-            sortedProduct.sort((a, b) => a.price - b.price) : sortedProduct.sort((a, b) => b.price - a.price)
-        setFilterProduct([...sortedProduct])
+    const handlePriceFilter = (e: React.ChangeEvent<HTMLSelectElement>) => {
+        const sort = parseInt(e.target.value, 10)
+        const filteredCopy = [...filterProduct]
+        if (sort > 0) {
+            filteredCopy.sort((a, b) => a.price - b.price)
+        } else {
+            filteredCopy.sort((a, b) => b.price - a.price)
+        }
+        setFilterProduct([...filteredCopy])
+        // sort > 0 ?
+        //     filteredCopy.sort((a, b) => a.price - b.price) : filteredCopy.sort((a, b) => b.price - a.price)
+
     }
 
     return (<>
@@ -92,13 +76,13 @@ function Products({ ...data }) {
                 <ClipLoader color="green" loading={loading} size={70} />
             </div> :
 
-            <div className="bg-white mx-auto flex ">
+            <div className="bg-white mx-auto flex  ">
 
-                <div className=" lg:w-[1200px] mx-auto max-w-2xl px-4 py-16 sm:px-6 sm:py-24 lg:max-w-7xl lg:px-8 ">
-                    <div className="flex flex-wrap justify-between sm:justify-">
+                <div className=" lg:w-[1200px] mx-auto max-w-2xl px-4 py-24 sm:py-24 lg:py-16 sm:px-6  lg:max-w-7xl lg:px-8 ">
+                    <div className="flex flex-wrap lg:justify-between sm:justify-evenly ">
                         {categorys &&
 
-                            <ul className="flex flex-wrap gap-5 pb-10">
+                            <ul className="flex flex-wrap sm:gap-0 md:gap-2 lg:gap-5 pb-10">
                                 <li key={0} className="" >
                                     <button className="hover:bg-slate-100 p-4 rounded-md "
                                         onClick={() => handleFilter('ALL PRODUCTS')}>
@@ -125,12 +109,14 @@ function Products({ ...data }) {
                         }
                         {
 
-                            <div className="w-full  pb-10 md:w-1/2 sm:w-full flex justify-center items-center ">
-                                <div className="flex sm:justify-center items-center w-full">
+                            <div className="w-full  pb-10 lg:w-2/5  md:w-full flex justify-center items-center ">
+                                <div className="flex sm:justify-center gap-2 items-center w-full">
 
                                     <div className="">
-                                        <select onChange={handlePriceFilter} className="bg-white border border-gray-300  text-gray-900 text-sm rounded-lg focus:ring-black focus:border-black block w-full p-2.5   ">
-                                            <option value={0} >SORT BY</option>
+                                        <select defaultValue="" onChange={handlePriceFilter} className="bg-white border border-gray-300  text-gray-900 text-sm rounded-lg focus:ring-black focus:border-black block w-full p-2.5   ">
+                                            <option value="" disabled hidden>
+                                                SORT BY
+                                            </option>
                                             <option value={1}  >Price Low To High</option>
                                             <option value={-1}  >Price High To Low</option>
                                         </select>
@@ -147,7 +133,7 @@ function Products({ ...data }) {
                         }
                     </div>
 
-                    <div >
+                    <div className="flex   justify-center md:justify-start">
                         <h2 className="text-2xl font-bold tracking-tight text-gray-900">{category.toUpperCase()}</h2>
                     </div>
 

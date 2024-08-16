@@ -1,10 +1,13 @@
-import { Fragment } from "react";
+import { Fragment, useState } from "react";
 import { Disclosure, Menu, Transition } from "@headlessui/react";
 import { Bars3Icon, XMarkIcon } from "@heroicons/react/24/outline";
 import { Link, useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { useAuth0 } from '@auth0/auth0-react'
 import { LogoutUser } from "../../redux/userAuth";
+import { FiLogOut } from "react-icons/fi";
+import Modal from "./Modal";
+import { UserAuthState } from "../../Types/allType";
 import { RootState } from "../../redux/store";
 
 const navigation = [
@@ -13,27 +16,35 @@ const navigation = [
   { name: "CART", href: "/cart", current: false },
 ];
 
-
+const modalData={
+  text:"Do you really want to Logout from this account? ",
+  action:"Log Out"
+}
 
 function classNames(...classes: any) {
   return classes.filter(Boolean).join(" ");
 }
 
 export default function Navbar() {
+  const [isModalOpen, setIsModalOpen] = useState<boolean>(false)
+
   // const { user } = useAuth0()
-  const {  logout,loginWithRedirect } = useAuth0()
-  const dispatch=useDispatch()
+  const { logout, loginWithRedirect } = useAuth0()
+  const dispatch = useDispatch()
   const navigate = useNavigate();
   // const dispatch = useDispatch()
   const { userData } = useSelector((state: RootState) => state.userAuth)
+
   const handleLogout = () => {
     console.log('logout');
-    logout()
-    dispatch(LogoutUser({userData:''}))
-    
+    setIsModalOpen(true)
   }
 
- 
+  const handleAction = () => {
+    logout()
+    dispatch(LogoutUser({ userData: '' }))
+  }
+
   // const handleNavigteLogin = () => {
   //   navigate('/log')
   // }
@@ -43,14 +54,13 @@ export default function Navbar() {
   // }
 
   return (
-    <Disclosure as="nav" className="bg-white">
+    <Disclosure as="nav" className="bg-white sticky top-1 z-10 ">
       {({ open }) => (
         <>
-          <div>
-            <div className="mx-auto max-w-full bg-black  mr-1 ml-1 lg:px-8 border-2 border-black mt-1">
+          <div className="">
+            <div className="mx-auto lg:h-20 max-w-full  bg-black  mr-1 ml-1 lg:px-8 border-2 border-black mt-1">
               <div className="relative flex h-16 items-center justify-between">
                 <div className="absolute inset-y-0 left-0 flex items-center sm:hidden">
-                  {/* Mobile menu button*/}
                   <Disclosure.Button className="inline-flex items-center justify-center rounded-md p-2 text-white hover:bg-gray-700 hover:text-white focus:outline-none    ">
                     <span className="sr-only">Open main menu</span>
                     {open ? (
@@ -166,7 +176,7 @@ export default function Navbar() {
                         ) : (
                           <Menu.Item>
                             {({ active }) => (
-                              <h6 onClick={()=>loginWithRedirect()}
+                              <h6 onClick={() => loginWithRedirect()}
                                 className={classNames(
                                   active ? "bg-gray-100" : "",
                                   "block px-4 py-2 text-sm text-gray-700"
@@ -205,6 +215,10 @@ export default function Navbar() {
               ))}
             </div>
           </Disclosure.Panel>
+          {isModalOpen && (
+
+            <Modal setIsModalOpen={setIsModalOpen} handleAction={handleAction}  modalData={ modalData} icon={<FiLogOut size={40} color="red" />}  />
+          )}
         </>
       )}
     </Disclosure>

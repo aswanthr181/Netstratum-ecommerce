@@ -2,9 +2,13 @@ import { configureStore } from "@reduxjs/toolkit";
 import cartReducer from './cart'
 import authReducer from './userAuth'
 import adminReducer from './adminAuth'
+
 import storage from "redux-persist/lib/storage";
 import persistReducer from "redux-persist/es/persistReducer";
 import persistStore from "redux-persist/es/persistStore";
+import { Action } from "@reduxjs/toolkit";
+import { UserAuthState } from "../Types/allType";
+import { AdminAuthState } from "../Types/allType";
 
 const userConfigure = {
     key: 'user',
@@ -19,8 +23,8 @@ const cartConfigure={
     storage
 }
 
-const persistedAuthReducer = persistReducer(userConfigure, authReducer)
-const persistedAdminReducer = persistReducer(adminConfigure, adminReducer)
+const persistedAuthReducer = persistReducer<UserAuthState,Action>(userConfigure, authReducer)
+const persistedAdminReducer = persistReducer<AdminAuthState,Action>(adminConfigure, adminReducer)
 const persistedCartReducer=persistReducer(cartConfigure,cartReducer)
 
 export const store = configureStore({

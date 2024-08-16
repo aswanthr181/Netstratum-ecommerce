@@ -5,7 +5,7 @@ import ProductForm from "../../components/admin/ProductForm"
 // import axios from "axios"
 
 function ProductEdit() {
-  const {productId}=useParams()
+  const {productId}=useParams<string>()
   
   return (
   <>    
@@ -14,7 +14,6 @@ function ProductEdit() {
       <ProductForm id={productId}/>
      </div>
     </> 
-
   )
 }
 

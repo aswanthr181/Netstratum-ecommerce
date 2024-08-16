@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react'
 import { io } from "socket.io-client"
 import Chat from '../common/Chat'
 import { useSelector } from 'react-redux'
+import Navbar from '../common/Navbar'
 
 const socket = io('ws://localhost:3000')
 type MessageType = {
@@ -55,13 +56,32 @@ function UserChat() {
         }
     }
     return (
-        <div>
+        <>
+            <Navbar/>
             {showChat ?
                 <Chat message={message} messages={messages} setMessage={setMessage} sendMessage={sendMessage} chatData={chatData} user={userData.email} />
-                : <div><button onClick={handleJoinRoom}>
-                    chat</button></div>
+                : <div>
+                    {/* <button onClick={handleJoinRoom}>
+                    chat</button> */}
+
+                    <div className=" h-screen">
+                        <div className="bg-white p-6  md:mx-auto">
+                            <div className="text-center">
+                                <h3 className="md:text-2xl text-base text-gray-900 font-semibold text-center">Order Success!</h3>
+                                <p className="text-gray-600 my-2">Thank you for completing your online shopping.</p>
+                                <p> Have a great day!  </p>
+                                <div className="py-10 text-center">
+                                    <button onClick={handleJoinRoom} className="px-12 bg-indigo-600 hover:bg-indigo-500 text-white font-semibold py-3">
+                                        Start a Conversation
+                                    </button>
+
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
             }
-        </div>
+        </>
     )
 }
 

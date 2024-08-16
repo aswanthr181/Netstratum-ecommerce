@@ -2,10 +2,11 @@ import { Link, useNavigate } from "react-router-dom"
 import CartCard from "../common/Cards/CartCard"
 import { useEffect, useState } from "react"
 import { useSelector } from "react-redux"
+import {  CartItem, UserCart } from "../../Types/allType"
 
 
 function Cart() {
-    const [cart, useCart] = useState([])
+    const [cart, useCart] = useState<UserCart[]>([])
     const [total,setTotal]=useState<number>(0)
     const navigate = useNavigate()
     const { cartList } = useSelector((state: any) => state.cart)
@@ -13,7 +14,7 @@ function Cart() {
     console.log('uuuu', userData.email);
 
     useEffect(() => {
-        const userCart = cartList.find((cart: any) => cart.user === userData.email)
+        const userCart = cartList.find((cart: UserCart) => cart.user === userData.email)
         // const {cartList} =useSelector((state:any)=>state.cart)
         if (userCart) {
             useCart(userCart.cart)
