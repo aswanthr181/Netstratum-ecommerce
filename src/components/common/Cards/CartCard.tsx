@@ -1,33 +1,34 @@
-import { RxCross1 } from "react-icons/rx";
-import { useDispatch, useSelector } from "react-redux";
-import { decrementQuantity, incrementQuantity, removeFromCart } from "../../../redux/cart";
 import { useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { RxCross1 } from "react-icons/rx";
 import { AiFillDelete } from "react-icons/ai";
-
+import { decrementQuantity, incrementQuantity, removeFromCart } from "../../../redux/cart";
 import Modal from "../Modal";
+import { CartItem } from "../../../Types/allType";
+import { RootState } from "../../../redux/store";
 
-function CartCard({ item }: { item: any }) {
+
+function CartCard({ item }: { item: CartItem }) {
     const [isModalOpen, setIsModalOpen] = useState<boolean>(false)
     const modalData={
-        text:"Do you really want to remove this Product? This process cannot be undonee ",
+        text:"Do you really want to remove this Product from Cart",
         action:"REMOVE"
     }
 
     const dispatch = useDispatch()
-    const { userData } = useSelector((state: any) => state.userAuth)
+    const { userData } = useSelector((state: RootState) => state.userAuth)
 
     const handleQuantityUpdate = (task: number) => {
         task > 0 ?
-            dispatch(incrementQuantity({ user: userData.email, productId: item.id })) : dispatch(decrementQuantity({ user: userData.email, productId: item.id }))
+            dispatch(incrementQuantity({ user: userData?.email, productId: item.id })) : dispatch(decrementQuantity({ user: userData?.email, productId: item.id }))
     }
 
     const handleRomove = () => {
         setIsModalOpen(true)
-        // dispatch(removeFromCart({user:userData.email,productId:item.id}))
     }
     const handleAction = () => {
-        dispatch(removeFromCart({ user: userData.email, productId: item.id }))
-        setIsModalOpen(true)
+        dispatch(removeFromCart({ user: userData?.email, productId: item.id }))
+        setIsModalOpen(false)
 
 
     }

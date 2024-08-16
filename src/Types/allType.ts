@@ -44,7 +44,7 @@ export interface userDataType {
 }
 
 export interface UserAuthState {
-    userData: userDataType | null;
+    userData: userDataType 
 }
 
 export interface adminDataType {

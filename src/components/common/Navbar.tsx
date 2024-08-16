@@ -7,7 +7,6 @@ import { useAuth0 } from '@auth0/auth0-react'
 import { LogoutUser } from "../../redux/userAuth";
 import { FiLogOut } from "react-icons/fi";
 import Modal from "./Modal";
-import { UserAuthState } from "../../Types/allType";
 import { RootState } from "../../redux/store";
 
 const navigation = [
@@ -36,22 +35,13 @@ export default function Navbar() {
   const { userData } = useSelector((state: RootState) => state.userAuth)
 
   const handleLogout = () => {
-    console.log('logout');
     setIsModalOpen(true)
   }
 
   const handleAction = () => {
     logout()
-    dispatch(LogoutUser({ userData: '' }))
+    dispatch(LogoutUser({ userData: null }))
   }
-
-  // const handleNavigteLogin = () => {
-  //   navigate('/log')
-  // }
-  // {
-  //   user ?
-  //     console.log(user.email) : console.log('no data');
-  // }
 
   return (
     <Disclosure as="nav" className="bg-white sticky top-1 z-10 ">

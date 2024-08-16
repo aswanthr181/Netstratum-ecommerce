@@ -3,19 +3,18 @@ import CartCard from "../common/Cards/CartCard"
 import { useEffect, useState } from "react"
 import { useSelector } from "react-redux"
 import {  CartItem, UserCart } from "../../Types/allType"
+import { RootState } from "../../redux/store"
 
 
 function Cart() {
-    const [cart, useCart] = useState<UserCart[]>([])
+    const [cart, useCart] = useState<CartItem[]>([])
     const [total,setTotal]=useState<number>(0)
     const navigate = useNavigate()
-    const { cartList } = useSelector((state: any) => state.cart)
-    const { userData } = useSelector((state: any) => state.userAuth)
-    console.log('uuuu', userData.email);
+    const { cartList } = useSelector((state: RootState) => state.cart)
+    const { userData } = useSelector((state: RootState) => state.userAuth)
 
     useEffect(() => {
-        const userCart = cartList.find((cart: UserCart) => cart.user === userData.email)
-        // const {cartList} =useSelector((state:any)=>state.cart)
+        const userCart = cartList.find((cart: UserCart) => cart.user === userData?.email)
         if (userCart) {
             useCart(userCart.cart)
             setTotal(userCart.total)
@@ -28,23 +27,22 @@ function Cart() {
             navigate('/success')
         }, 500)
     }
-    console.log(cart, 'carrrrr');
 
     return (
         <>
             {cart && cart.length > 0 ?
-                <div className="h-screen  py-12 sm:py-16 lg:py-20">
+                <div className="h-full  py-12 sm:py-16 lg:py-20 mb-20 ">
                     <div className="mx-auto px-4  sm:px-6 lg:px-8">
                         <div className="flex items-center justify-center">
                             <h1 className="text-2xl font-semibold text-gray-900">Your Cart</h1>
                         </div>
 
                         <div className="mx-auto mt-8 max-w-md md:mt-12">
-                            <div className="rounded-3xl bg-white shadow-lg">
+                            <div className="rounded-3xl bg-white shadow-xl">
                                 <div className="px-4 py-6 sm:px-8 sm:py-10">
                                     <div className="flow-root">
                                         <ul className="-my-8">
-                                            {cart.map((item: any) => (
+                                            {cart.map((item: CartItem) => (
                                                 <CartCard key={item.id} item={item} />
                                             ))}
                                         </ul>

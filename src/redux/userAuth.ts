@@ -1,7 +1,7 @@
 import { createSlice } from "@reduxjs/toolkit";
 import { userDataType } from "../Types/allType";
 
-interface UserAuthState {
+export interface UserAuthState {
     userData: userDataType|null;
 }
 const InitialState: UserAuthState={

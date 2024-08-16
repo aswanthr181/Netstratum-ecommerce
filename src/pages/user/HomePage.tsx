@@ -19,21 +19,15 @@ function HomePage() {
 
 
   const handlRedux = () => {
-    console.log("usssssssssssss", user);
-
-    // const c = JSON.stringify(user)
-    // const d = JSON.parse(c)
     dispatch(GetUserData({ userData: user }))
   }
 
   useEffect(() => {
-    isAuthenticated ?
-      handlRedux() : ''
+    if(isAuthenticated){
+      handlRedux()
+    }
   }, [isAuthenticated])
-  // const handleLogout=()=>{
-  //   logout()
-  //   dispatch(GetUserData({ userData: ''}))
-  // }
+  
   return (
     <>
       <div>

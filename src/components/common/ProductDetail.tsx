@@ -1,25 +1,27 @@
-import { IoMdHeartEmpty } from "react-icons/io";
-import { BsCart } from "react-icons/bs";
-import "react-responsive-carousel/lib/styles/carousel.min.css"
 import { useEffect, useState } from "react";
 import axios from 'axios'
 import { useNavigate, useParams } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
+import { IoMdHeartEmpty } from "react-icons/io";
+import { BsCart } from "react-icons/bs";
 import { useAuth0 } from "@auth0/auth0-react";
+import "react-responsive-carousel/lib/styles/carousel.min.css"
 import { addTocart } from "../../redux/cart";
 import { ProductType } from "../../Types/allType";
 import { ClipLoader } from "react-spinners"
 import { productApi } from "../../constants/api";
+import { RootState } from "../../redux/store";
 
 
 function ProductDetail() {
+    const { loginWithRedirect } = useAuth0()
     const [productData, setProductData] = useState<ProductType>()
     const [loading, setLoading] = useState<boolean>(true)
-    const { productId } = useParams()
-    const { isAuthenticated, user } = useAuth0()
+    const { productId } = useParams<string>()
     const dispatch = useDispatch()
     const navigate = useNavigate()
-    const { cartList } = useSelector((state: any) => state.cart)
+    const {userData}=useSelector((state:RootState)=>state.userAuth)
+
 
     useEffect(() => {
         axios.get(`${productApi}/${productId}`).then((response) => {
@@ -29,15 +31,14 @@ function ProductDetail() {
     }, [])
 
     const handleAddToCart = () => {
-        if (isAuthenticated) {
-            dispatch(addTocart({ user: user?.email, product: productData }))
+        if (userData) {
+            dispatch(addTocart({ user: userData?.email, product: productData }))
             navigate('/cart')
         } else {
-            navigate('/log')
+            loginWithRedirect()
         }
 
     }
-    console.log('carrrrrt', cartList);
 
     return (
         <>
