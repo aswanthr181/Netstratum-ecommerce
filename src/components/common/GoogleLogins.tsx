@@ -4,8 +4,9 @@ import { useDispatch } from "react-redux"
 // import { GetUserData } from "../../redux/userAuth"
 import { useNavigate } from "react-router-dom"
 import { GetAdminData } from "../../redux/adminAuth"
+import { generateError } from "../../constants/Alerts"
 
-function GoogleLogins({generateError}:any) {
+function GoogleLogins() {
   const navigate = useNavigate()
   const dispatch = useDispatch()
 
@@ -22,7 +23,7 @@ function GoogleLogins({generateError}:any) {
               console.log('successss payload', payload);
               dispatch(GetAdminData({ adminData: payload }))
               navigate('/portal')
-            }else{
+            } else {
               generateError('YOU ARE NOT AUTHORIZED ADMIN')
             }
           }

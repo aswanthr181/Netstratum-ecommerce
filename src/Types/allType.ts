@@ -30,6 +30,22 @@ export interface UserCart {
     cart: CartItem[]
     total: number;
 }
+export interface orderDetailsType{
+    user:string|null;
+    products:CartItem[]
+    address:string
+    total:number
+    status:string
+    paymentType: string;  
+    phone: number;
+    date:string
+    name:string
+}
+
+export interface UserOrder{
+    user:string;
+    order:orderDetailsType[]
+}
 
 export interface userDataType {
     email: string

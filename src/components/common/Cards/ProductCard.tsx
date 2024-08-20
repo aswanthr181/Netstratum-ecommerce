@@ -2,25 +2,56 @@
 // import { useWishList } from "../../Context/WishListContext"
 import axios from "axios"
 import { useNavigate } from "react-router-dom"
+import { ProductType } from "../../../Types/allType"
+import { productApi } from "../../../constants/api"
+import { useState } from "react"
+import { AiFillDelete } from "react-icons/ai";
+import Modal from "../Modal"
+import { Toast } from "../../../constants/Alerts"
 
 
+interface actionType {
+    action: string
+    url: string
+    req: string
+}
+interface dataType {
+    author: string
+    action: actionType[]
 
-function ProductCard({ product, data }: any) {
-    const author = data.data
+}
+interface ProductCardType {
+    product: ProductType,
+    data: dataType
+    handleAdminRemove: (id: number) => void
+}
+const modalData = {
+    text: "Do you really Delete this Product? ",
+    action: "Delete"
+}
+function ProductCard({ product, data, handleAdminRemove }: ProductCardType) {
+    const [isModalOpen, setIsModalOpen] = useState<boolean>(false)
+    const [productIdToDelete, setProductIdToDelete] = useState<number | null>(null);
+
 
     const navigate = useNavigate()
-    // const {addRemoveList}=useWishList()
-
-    // const handleUpdateWishlist=()=>{
-    //     addRemoveList(product)
-    // }
-
-    const handleNavigate = (productId: number,url:any,req:any) => {
-        if(req==='api'){
-            axios.delete(`https://fakestoreapi.com/products/${productId}`).then((res)=>{
-                console.log('resssssssssss',res.data);
-            })
-        }else{
+    const handleAction = () => {
+        axios.delete(`${productApi}/${productIdToDelete}`).then((res) => {
+            if (res.data) {
+                handleAdminRemove(Number(productIdToDelete))
+                Toast.fire({
+                    icon: "success",
+                    title: "PRODUCT DELETED",
+                })
+            }
+            console.log('resssssssssss', res.data);
+        })
+    }
+    const handleNavigate = (productId: number, url: string, req: string) => {
+        if (req === 'api') {
+            setProductIdToDelete(productId)
+            setIsModalOpen(true)
+        } else {
             navigate(`${url}/${productId}`)
         }
     }
@@ -50,10 +81,10 @@ function ProductCard({ product, data }: any) {
                             <span className="text-xl font-bold text-slate-900">${product.price}</span>
                         </p>
                     </div>
-                    {author.action.map((item:any,i: any) => {
+                    {data.action.map((item: actionType, i: number) => {
                         return (
                             <div key={i} className="flex">
-                                <div  onClick={() => handleNavigate(product.id,item.url,item.req)}
+                                <div onClick={() => handleNavigate(product.id, item.url, item.req)}
                                     className="w-full mb-1 flex items-center justify-center rounded-md bg-slate-900 px-5 py-2.5 text-center text-sm font-medium text-white hover:bg-gray-700 focus:outline-none focus:ring-4 focus:ring-blue-300">
                                     {item.action}
                                 </div>
@@ -63,6 +94,10 @@ function ProductCard({ product, data }: any) {
 
                 </div>
             </div>
+            {isModalOpen && (
+
+                <Modal setIsModalOpen={setIsModalOpen} handleAction={handleAction} modalData={modalData} icon={<AiFillDelete size={40} color="red" />} />
+            )}
         </>
     )
 }

@@ -1,40 +1,30 @@
 import axios from "axios"
 import { useEffect, useState } from "react"
-import { Toaster, toast } from 'react-hot-toast'
+import { Toaster } from 'react-hot-toast'
 import { useNavigate } from "react-router-dom"
-import Swal from 'sweetalert2'
 import Form from "./Form"
+import { generateError, Toast } from "../../constants/Alerts"
+import Loader from "../common/Loader"
+import { productApi } from "../../constants/api"
 
 
-function ProductForm({ id }:any ) {
-    console.log(typeof(id));
-     typeof(id)
+function ProductForm({ id }: { id: string|undefined }) {
     const [loading, setLoading] = useState<boolean>(true)
     const [category, setCategory] = useState<string>('')
     const [title, setTitle] = useState<string>('')
-    const [price, setPrice] = useState<number>(0)
+    const [price, setPrice] = useState<string>('')
     const [description, setDescription] = useState<string>('')
-    const [image, setImage] = useState<any>()
-    // const [page,setPage]=useState<number>(1)
-    // const [productData, setProductData] = useState<any>()
-    const navigate=useNavigate()
-console.log(loading);
+    const [image, setImage] = useState<string>('')
+    const navigate = useNavigate()
+    console.log(loading);
 
-    const generateError = (err: any) => {
-        if (typeof err.message === 'string') {
-            toast.error(err.message, { position: "bottom-center" });
-        } else {
-            toast.error("An unexpected error occurred", { position: "bottom-center" });
-        }
-    };
 
     useEffect(() => {
         setLoading(true)
 
-        axios.get(`https://fakestoreapi.com/products/${id}`)
+        axios.get(`${productApi}/${id}`)
             .then((res) => {
                 const response = res.data
-                // setProductData(res.data)
                 setTitle(response.title)
                 setPrice(response.price)
                 setDescription(response.description)
@@ -47,60 +37,54 @@ console.log(loading);
     }, [])
 
 
-    const base64 = (img: any) => {
-        let reader = new FileReader();
-        console.log('first')
-        reader.readAsDataURL(img)
-        reader.onload = () => {
-            setImage(reader.result);
-        };
-        reader.onerror = (error) => {
-            console.log("Error: ", error);
-        };
+    const handleImageUpload=(img: File)=>{
+        const allowedTypes = ['image/jpeg', 'image/png'];
+        if(allowedTypes.includes(img.type)){
+            setImage(URL.createObjectURL(img))
+        }else{
+            generateError("Please select a valid image")
+        }
     }
 
-    const handleSubmission = async (e: any) => {
+    const handleSubmission = async (e:  React.FormEvent<HTMLFormElement>) => {
         e.preventDefault()
-        if (!description?.trim() || !title?.trim() ) {
-            alert('enter all fields')
+        if (!description?.trim() || !title?.trim() || !category.trim()) {
+            generateError('enter all fields')
             return
         }
-
-        const Toast = Swal.mixin({
-            toast: true,
-            position: "top-right",
-            showConfirmButton: false,
-            timer: 1000,
-            timerProgressBar: true,
-            didOpen: (toast) => {
-                toast.addEventListener("mouseenter", Swal.stopTimer);
-                toast.addEventListener("mouseleave", Swal.resumeTimer);
-            },
-        });
         try {
-            let response = await axios.put(`https://fakestoreapi.com/products/${id}`, { title, price, description, image, category })
-            let result=response.data
-            if(result){
+            let response = await axios.put(`${productApi}/${id}`, { title, price, description, image, category })
+            let result = response.data
+            if (result) {
                 Toast.fire({
                     icon: "success",
                     title: "PRODUCT UPDATED ",
-                  })
+                })
             }
             navigate('/portal')
         } catch (error) {
-            generateError(error)
+            console.log(error);
+            generateError(String(error))
         }
     }
 
     return (
-        <div className="flex justify-center items-center h-screen ">
+        <>
+
+            {loading ?
+                <Loader loading={loading} />
+                :
+                <div className="flex justify-center  w-full h-screen ">
             <Toaster />
-            <div className="flex items-center justify-center p-12 bg-white shadow-lg overflow-y-scroll ">
-                <Form 
-                setTitle={setTitle} setPrice={setPrice} base64={base64} handleSubmission={handleSubmission} setDescription={setDescription} 
-                title={title} price={price} description={description} image={image} />
-            </div>
-        </div>
+
+            <div className="flex  justify-center w-full bg-white   ">
+                        <Form
+                            setTitle={setTitle} setPrice={setPrice} base64={handleImageUpload} handleSubmission={handleSubmission} setDescription={setDescription}
+                            title={title} price={price} description={description} image={image} setCategory={setCategory} />
+                    </div>
+                </div>
+            }
+        </>
     )
 }
 

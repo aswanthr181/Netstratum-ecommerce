@@ -7,11 +7,15 @@ Chart.register(CategoryScale)
 interface Chart1Props {
     products: ProductType[];
   }
+  interface CategoryRating {
+    totalRating: number;
+    count: number;
+}
 function Chart1({ products }:Chart1Props) {
     console.log(products[0].title);
 
-    const groupByCategoryAverage = (products: any) => {
-        const groupByCategory = products.reduce((acc: any, product: ProductType) => {
+    const groupByCategoryAverage = (products: ProductType[]) => {
+        const groupByCategory = products.reduce((acc: Record<string, CategoryRating>, product: ProductType) => {
             if (!acc[product.category]) {
                 acc[product.category] = { totalRating: product.rating.rate, count: 1 }
             } else {
@@ -19,7 +23,7 @@ function Chart1({ products }:Chart1Props) {
                 acc[product.category].count += 1
             }
             return acc
-        }, {})
+        }, {}as Record<string, CategoryRating>)
 
         return Object.keys(groupByCategory).map((category: string) => ({
             category,

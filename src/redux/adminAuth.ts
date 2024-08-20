@@ -1,11 +1,13 @@
 import { createSlice } from "@reduxjs/toolkit";
 import { adminDataType } from "../Types/allType";
 
-interface AdminAuthState {
+export interface AdminAuthState {
     adminData: adminDataType|null;
+    current:number
 }
 const InitialState: AdminAuthState={
-    adminData:null
+    adminData:null,
+    current:0
 }
 
 const adminAuth=createSlice({
@@ -18,9 +20,12 @@ const adminAuth=createSlice({
         },
         LogOutAdmin(state,action){
             state.adminData=action.payload.adminData
+        },
+        CurrentPage(state,action){
+            state.current=action.payload.page
         }
     }
 })
 
-export const {GetAdminData,LogOutAdmin}=adminAuth.actions
+export const {GetAdminData,LogOutAdmin,CurrentPage}=adminAuth.actions
 export default adminAuth.reducer

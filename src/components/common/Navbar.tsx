@@ -1,7 +1,7 @@
 import { Fragment, useState } from "react";
 import { Disclosure, Menu, Transition } from "@headlessui/react";
 import { Bars3Icon, XMarkIcon } from "@heroicons/react/24/outline";
-import { Link, useNavigate } from "react-router-dom";
+import {  useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { useAuth0 } from '@auth0/auth0-react'
 import { LogoutUser } from "../../redux/userAuth";
@@ -9,15 +9,27 @@ import { FiLogOut } from "react-icons/fi";
 import Modal from "./Modal";
 import { RootState } from "../../redux/store";
 
-const navigation = [
-  { name: "HOME", href: "/", current: false },
-  { name: "SHOP", href: "/", current: false },
-  { name: "CART", href: "/cart", current: false },
+interface navigationType {
+  name: string
+  href: string
+  authCheck: boolean
+}
+const navigation: navigationType[] = [
+  { name: "HOME", href: "/", authCheck: false },
+  { name: "SHOP", href: "/", authCheck: false },
+  { name: "CART", href: "/cart", authCheck: true },
 ];
 
-const modalData={
-  text:"Do you really want to Logout from this account? ",
-  action:"Log Out"
+const menuNavigations: navigationType[] = [
+  { name: "Your Profile", href: "/", authCheck: true },
+  { name: "Order History", href: "/orders", authCheck: true },
+  { name: "Customer support", href: "/chat", authCheck: true },
+  { name: "Admin Login", href: "/portal", authCheck: false },
+
+]
+const modalData = {
+  text: "Do you really want to Logout from this account? ",
+  action: "Log Out"
 }
 
 function classNames(...classes: any) {
@@ -33,6 +45,19 @@ export default function Navbar() {
   const navigate = useNavigate();
   // const dispatch = useDispatch()
   const { userData } = useSelector((state: RootState) => state.userAuth)
+
+  const handleNavigation = (item: navigationType) => {
+    
+    if (item.authCheck) {
+      if (userData !== null) {
+        navigate(item.href)
+      } else {
+        loginWithRedirect()
+      }
+    } else {
+      navigate(item.href)
+    }
+  }
 
   const handleLogout = () => {
     setIsModalOpen(true)
@@ -71,21 +96,18 @@ export default function Navbar() {
                   <div className="hidden sm:ml-6 sm:block">
                     <div className="flex space-x-4">
                       {navigation.map((item) => (
-                        <a
+                        <div
                           key={item.name}
-                          onClick={() => {
-                            navigate(item.href);
-                          }}
+                          onClick={() => handleNavigation(item)}
                           className={classNames(
-                            item.current
-                              ? "bg-gray-900 text-white"
-                              : "text-white hover:bg-gray-700 hover:text-white cursor-pointer",
+                            // item.current? "bg-gray-900 text-white":
+                            "text-white hover:bg-gray-700 hover:text-white cursor-pointer",
                             "rounded-md px-3 py-2 text-sm font-medium"
                           )}
-                          aria-current={item.current ? "page" : undefined}
+
                         >
                           {item.name}
-                        </a>
+                        </div>
                       ))}
                     </div>
                   </div>
@@ -113,43 +135,25 @@ export default function Navbar() {
                       leaveFrom="transform opacity-100 scale-100"
                       leaveTo="transform opacity-0 scale-95"
                     >
+
                       <Menu.Items className="absolute right-0 z-10 mt-2 w-48 origin-top-right rounded-md bg-white py-1 shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none">
-                        <Menu.Item>
-                          {({ active }) => (
-                            <a
-                              className={classNames(
-                                active ? "bg-gray-100" : "",
-                                "block px-4 py-2 text-sm text-gray-700"
-                              )}
-                            >
-                              Your Profile
-                            </a>
-                          )}
-                        </Menu.Item>
-                        <Menu.Item>
-                          {({ active }) => (
-                            <h6
-                              className={classNames(
-                                active ? "bg-gray-100" : "",
-                                "block px-4 py-2 text-sm text-gray-700"
-                              )}
-                            >
-                              <Link to="/bookingHistory">Order History</Link>
-                            </h6>
-                          )}
-                        </Menu.Item>
-                        <Menu.Item>
-                          {({ active }) => (
-                            <a
-                              className={classNames(
-                                active ? "bg-gray-100" : "",
-                                "block px-4 py-2 text-sm text-gray-700"
-                              )}
-                            >
-                              <Link to="/chat">Customer support</Link>
-                            </a>
-                          )}
-                        </Menu.Item>
+                        {menuNavigations.map((item,i) => (
+                          <Menu.Item key={i}>
+                            {({ active }) => (
+                              <div key={i} onClick={()=>handleNavigation(item)}
+                                className={classNames(
+                                  active ? "bg-gray-100" : "",
+                                  "block px-4 py-2 text-sm text-gray-700"
+                                )}
+                              >
+                                {item.name}
+                              </div>
+                            )}
+                          </Menu.Item>
+                        ))}
+                       
+                        
+                        
                         {userData ? (
                           <Menu.Item>
                             {({ active }) => (
@@ -191,14 +195,12 @@ export default function Navbar() {
                 <Disclosure.Button
                   key={item.name}
                   as="a"
-                  onClick={() => navigate(item.href)}
+                  onClick={() => handleNavigation(item)}
                   className={classNames(
-                    item.current
-                      ? "bg-gray-900 text-white"
-                      : "text-gray-800 hover:bg-gray-700 hover:text-white",
+                    // item.current? "bg-gray-900 text-white":
+                    "text-gray-800 hover:bg-gray-700 hover:text-white",
                     "block rounded-md px-3 py-2 text-base font-medium"
                   )}
-                  aria-current={item.current ? "page" : undefined}
                 >
                   {item.name}
                 </Disclosure.Button>
@@ -207,7 +209,7 @@ export default function Navbar() {
           </Disclosure.Panel>
           {isModalOpen && (
 
-            <Modal setIsModalOpen={setIsModalOpen} handleAction={handleAction}  modalData={ modalData} icon={<FiLogOut size={40} color="red" />}  />
+            <Modal setIsModalOpen={setIsModalOpen} handleAction={handleAction} modalData={modalData} icon={<FiLogOut size={40} color="red" />} />
           )}
         </>
       )}

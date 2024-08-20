@@ -4,7 +4,7 @@ import Dashboard from "../../components/admin/Dashboard"
 function DashBoardPage() {
   return (
     <>
-      <div className='flex h-screen overflow-y-scroll'>
+      <div className='flex-row md:flex h-screen overflow-y-scroll'>
         <AdminNavbar/>
         <Dashboard />
 

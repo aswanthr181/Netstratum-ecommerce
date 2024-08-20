@@ -60,7 +60,7 @@ function Login() {
                     <div className="w-full p-14 lg:w-1/2">
                         <p className="text-xl text-gray-600 text-center">Welcome back!</p>
                         <div className="mb-5 flex justify-center items-center">
-                            <GoogleLogins generateError={generateError} />
+                            <GoogleLogins />
                         </div>
                         <p className="text-xl text-gray-600 text-center">OR</p>
                         <form onSubmit={handleLogin}>

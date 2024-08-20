@@ -3,15 +3,15 @@ import { UserCart } from "../Types/allType";
 // import { ProductType } from "../Types/productType";
 
 
-export interface InitialStateType {
+export interface InitialCartStateType {
     cartList: UserCart[];
     cartCount: number;
-    total:number;
+    total: number;
 }
-const InitialState: InitialStateType = {
+const InitialState: InitialCartStateType = {
     cartList: [],
     cartCount: 0,
-    total:0
+    total: 0
 }
 
 const cartSlice = createSlice({
@@ -44,9 +44,9 @@ const cartSlice = createSlice({
         },
         incrementQuantity: (state, action) => {
             const { user, productId } = action.payload;
-            
+
             const userCart = state.cartList.find((cart) => cart.user === user);
-            
+
             if (userCart) {
                 const product = userCart.cart.find((item) => item.id === productId)
                 if (product) {
@@ -79,12 +79,20 @@ const cartSlice = createSlice({
                     userCart.cart = userCart.cart.filter((item) => item.id !== productId)
                     state.cartCount -= product.quantity
                     userCart.total = userCart.cart.reduce((sum, item) => sum + item.price * item.quantity, 0);
-                
+
                 }
+            }
+        },
+        clearCart: (state, action) => {
+            const { user } = action.payload;
+            const userCart = state.cartList.find((cart) => cart.user === user);
+            if (userCart) {
+                userCart.cart = [];
+                userCart.total = 0;
             }
         }
     }
 })
 
-export const { addTocart, incrementQuantity,decrementQuantity,removeFromCart } = cartSlice.actions;
+export const { addTocart, incrementQuantity, decrementQuantity, removeFromCart,clearCart } = cartSlice.actions;
 export default cartSlice.reducer

@@ -2,15 +2,15 @@ import { useEffect, useState } from "react";
 import axios from 'axios'
 import { useNavigate, useParams } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
-import { IoMdHeartEmpty } from "react-icons/io";
 import { BsCart } from "react-icons/bs";
 import { useAuth0 } from "@auth0/auth0-react";
 import "react-responsive-carousel/lib/styles/carousel.min.css"
 import { addTocart } from "../../redux/cart";
 import { ProductType } from "../../Types/allType";
-import { ClipLoader } from "react-spinners"
 import { productApi } from "../../constants/api";
 import { RootState } from "../../redux/store";
+import { Toast } from "../../constants/Alerts";
+import Loader from "./Loader";
 
 
 function ProductDetail() {
@@ -20,7 +20,7 @@ function ProductDetail() {
     const { productId } = useParams<string>()
     const dispatch = useDispatch()
     const navigate = useNavigate()
-    const {userData}=useSelector((state:RootState)=>state.userAuth)
+    const { userData } = useSelector((state: RootState) => state.userAuth)
 
 
     useEffect(() => {
@@ -33,6 +33,10 @@ function ProductDetail() {
     const handleAddToCart = () => {
         if (userData) {
             dispatch(addTocart({ user: userData?.email, product: productData }))
+            Toast.fire({
+                icon: "success",
+                title: "PRODUCT ADDED TO CART ",
+            })
             navigate('/cart')
         } else {
             loginWithRedirect()
@@ -43,76 +47,81 @@ function ProductDetail() {
     return (
         <>
             {loading ?
-                <div className="flex  items-center justify-center h-screen overflow-y-scroll w-full">
-                    <ClipLoader color="green" loading={loading} size={70} />
-                </div> :
-                <div className=" w-full  h-screen md:py-5">
-                    <div className=" flex flex-col lg:flex-row md:px-10 gap-[50px] lg:gap-[100px]">
-
-                        <div className=" w-1/2 md:w-auto    max-w-[500px] lg:max-w-full mx-auto lg:mx-0">
-                            <div className="text-white   text-[20px] lg:w-full max-w-[1300px] mx-auto sticky top-[50px]">
-                                <img className="" src={productData ? productData.image : "https://images.unsplash.com/photo-1525966222134-fcfa99b8ae77?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MTB8fHNob2VzfGVufDB8fDB8fHww"} />
-                            </div>
-                        </div>
-                        <div className=" lg:w-1/2 overscroll-y-auto flex-  py-3">
-                            <div className=" text-[24px] font-semibold mb-3">
-                                {productData?.title}
-                            </div>
-                            <div className=" text-xl font-semibold mb-5">
-                                {productData?.category}
-                            </div>
-                            <div className=" text-lg font-semibold mb-0">MRF : $ {productData?.price}</div>
-                            <div className=" text-base font-medium text-black/[.5]">
-                                |
-                            </div>
-                            <div className=" overflow-hidden text-base font-medium text-black/[.5]">
-                                {productData?.description}
+                <Loader loading={loading} />
+                :
+                
+                <section className="py-8 bg-white md:py-16   max-w-screen-lg mx-auto">
+                    <div className="max-w-screen-xl px-4 mx-auto 2xl:px-0 sm:pt-56 lg:pt-0">
+                        <div className="lg:grid lg:grid-cols-2 lg:gap-8 xl:gap-16 items-center">
+                            <div className="shrink-0 h-[60%] max-w-md lg:max-w-lg mx-auto">
+                                <img
+                                    className="w-full h-full overflow-hidden object-contain"
+                                    src={productData?.image}
+                                    alt=""
+                                />
                             </div>
 
-                            <div className=" mb-10 mt-10">
+                            <div className="mt-6 sm:mt-8 lg:mt-0">
+                                <h1 className="text-xl font-semibold text-gray-900 sm:text-2xl">
+                                    {productData?.title}
+                                </h1>
+                                <div className="mt-4 sm:items-center sm:gap-4 sm:flex">
+                                    <p className="text-2xl font-extrabold text-gray-900 sm:text-3xl">
+                                        ${productData?.price}
+                                    </p>
 
-
-                                <div className=" ">
-                                    <div className="flex items-center gap-2">
-
-                                        <span className="flex ml-3 pl-3 py-2">
-                                            {[1, 2, 3, 4, 5].map((star: number) => {
-                                                const rate = productData?.rating?.rate ?? 0
-                                                return (
-                                                    <svg
-                                                        key={star}
-                                                        className={`w-6 h-6 cursor-pointer ${star <= rate ? "text-yellow-500" : "text-gray-100"}`}
-                                                        fill="currentColor"
-                                                        viewBox="0 0 20 20">
-                                                        <path
-                                                            fillRule="evenodd"
-                                                            d="M12 2l2.4 7.2h7.6l-6 4.8 2.4 7.2-6-4.8-6 4.8 2.4-7.2-6-4.8h7.6z"
-                                                            clipRule="evenodd" />
-                                                    </svg>
-                                                );
-                                            })}
-                                        </span>
-
-                                        <span className="pl-2 font-normal leading-7 text-gray-500 text-sm ">{productData?.rating.count} review</span>
+                                    <div className="flex items-center gap-2 mt-2 sm:mt-0">
+                                        <div className="flex items-center gap-1">
+                                            {/* Rating stars (5 stars) */}
+                                            {[...Array(5)].map((_, i) => (
+                                                <svg
+                                                    key={i}
+                                                    className="w-4 h-4 text-yellow-300"
+                                                    aria-hidden="true"
+                                                    xmlns="http://www.w3.org/2000/svg"
+                                                    width="24"
+                                                    height="24"
+                                                    fill="currentColor"
+                                                    viewBox="0 0 24 24"
+                                                >
+                                                    <path d="M13.849 4.22c-.684-1.626-3.014-1.626-3.698 0L8.397 8.387l-4.552.361c-1.775.14-2.495 2.331-1.142 3.477l3.468 2.937-1.06 4.392c-.413 1.713 1.472 3.067 2.992 2.149L12 19.35l3.897 2.354c1.52.918 3.405-.436 2.992-2.15l-1.06-4.39 3.468-2.938c1.353-1.146.633-3.336-1.142-3.477l-4.552-.36-1.754-4.17Z" />
+                                                </svg>
+                                            ))}
+                                        </div>
+                                        <p className="text-sm font-medium leading-none text-gray-500 dark:text-gray-400">
+                                            (5.0)
+                                        </p>
+                                        <a
+                                            href="#"
+                                            className="text-sm font-medium leading-none text-gray-900 underline hover:no-underline"
+                                        >
+                                            345 Reviews
+                                        </a>
                                     </div>
-
                                 </div>
 
-                            </div>
-                            <div className="">
-                                <button onClick={handleAddToCart}
-                                    className=" w-full py-4   flex items-center justify-center gap-2 mb-10   rounded-full bg-black text-white text-lg font-medium transition-transform active:scale-95  hover:opacity-75">
-                                    Add to Cart
-                                    <BsCart size={18} />
-                                </button>
-                                <button className=" w-full py-4 border border-black flex items-center justify-center gap-2 mb-10 rounded-full bg-white text-black text-lg font-medium transition-transform active:scale-95 hover:opacity-75">
-                                    Whishlist
-                                    <IoMdHeartEmpty size={20} />
-                                </button>
+                                <div className="mt-6 sm:gap-4 sm:items-center sm:flex sm:mt-8">
+                                    <button onClick={handleAddToCart}
+                                        className="flex items-center justify-center py-2.5 px-5 text-sm font-medium text-gray-900 focus:outline-none bg-white rounded-lg border border-gray-200 hover:bg-gray-100 hover:text-primary-700 focus:z-10 focus:ring-4 focus:ring-gray-100"
+                                        role="button"
+                                    >
+                                        <BsCart size={18} />
+                                        Add to Cart
+                                    </button>
+
+                                    
+                                </div>
+
+                                <hr className="my-6 md:my-8 border-gray-200 dark:border-gray-800" />
+
+                                <p className="mb-6 text-gray-500 dark:text-gray-400">
+                                    {productData?.description}
+                                </p>
                             </div>
                         </div>
                     </div>
-                </div>}
+                </section>
+            }
         </>
     )
 }

@@ -7,7 +7,10 @@ function ProductDetailPage() {
             <Navbar />
             {/* <div className="flex items-center justify-center h-screen w-full px-5 ">
                 <div className="flex bg-white rounded-lg lg:shadow-lg lg:border overflow-hidden max-w-sm lg:max-w-6xl w-full md:h-3/4"> */}
+                  <div className="flex justify-center items-center max-h-screen bg-white ">
+
                     <ProductDetail />
+                  </div>
                 {/* </div>
             </div> */}
         </div >

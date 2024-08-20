@@ -6,15 +6,15 @@ type MessageType = {
 };
 type chatDataType={
     sender:string 
-    pic:string
+    pic:string|undefined
 }
 type ChatProps = {
     message: string;
     messages: MessageType[];
     setMessage: (message: string) => void
-    sendMessage: any,
+    sendMessage: ()=>void,
     chatData: chatDataType,
-    user: string
+    user: string|undefined
 };
 
 function Chat({ message, messages, setMessage, sendMessage, chatData, user }: ChatProps) {
@@ -30,21 +30,18 @@ function Chat({ message, messages, setMessage, sendMessage, chatData, user }: Ch
                     <div className="flex flex-col h-full">
                         <div className="grid grid-cols-12 gap-y-2">
 
-
-
-
                             {messages.filter((message) => message.id == user).map((message) => {
                                 return (
                                     <>
-                                        <div className={`p-3 rounded-lg ${message.sender === chatData.sender ? 'col-start-6 col-end-13 ' : 'col-start-1 col-end-8 '}`} >
-                                            <div className={`flex items-center ${message.sender === chatData.sender ? '  justify-start flex-row-reverse' : ' flex-row '}`} >
+                                        <div className={`p-3 rounded-lg ${message.sender === chatData?.sender ? 'col-start-6 col-end-13 ' : 'col-start-1 col-end-8 '}`} >
+                                            <div className={`flex items-center ${message.sender === chatData?.sender ? '  justify-start flex-row-reverse' : ' flex-row '}`} >
                                                 <div className="flex items-center justify-center h-10 w-10 rounded-full flex-shrink-0">
                                                     <img
-                                                        src={message.sender === chatData.sender ? chatData.pic : 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQGlZkIqki43f4vMGa-DljqZBCOr6D6Cm_l_kDM06YEjL2QWlKZY_glSuSJGybsUIHmdpc&usqp=CAU'}
+                                                        src={message.sender === chatData?.sender ? chatData.pic : 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQGlZkIqki43f4vMGa-DljqZBCOr6D6Cm_l_kDM06YEjL2QWlKZY_glSuSJGybsUIHmdpc&usqp=CAU'}
                                                         className="h-full w-full rounded-full"
                                                         alt="" />
                                                 </div>
-                                                <div className={`relative  text-sm  py-2 px-4 shadow rounded-xl ${message.sender === chatData.sender ? 'mr-3 bg-indigo-100' : 'ml-3 bg-white'}`}>
+                                                <div className={`relative  text-sm  py-2 px-4 shadow rounded-xl ${message.sender === chatData?.sender ? 'mr-3 bg-indigo-100' : 'ml-3 bg-white'}`}>
                                                     <div>{message.text}</div>
                                                     <small className="text-xs text-gray-400"> {new Date().toLocaleString('en-US', {
                                                         hour: 'numeric',

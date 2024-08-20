@@ -17,7 +17,6 @@ function HomePage() {
     ]
   }
 
-
   const handlRedux = () => {
     dispatch(GetUserData({ userData: user }))
   }

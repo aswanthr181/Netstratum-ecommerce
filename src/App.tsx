@@ -13,14 +13,18 @@ import { useSelector } from 'react-redux'
 import CartPage from './pages/user/CartPage'
 import OrderSuccessPage from './pages/user/OrderSuccessPage'
 import DashBoardPage from './pages/admin/DashBoardPage'
-import UserChat from './components/user/UserChat'
-import AdminUsers from './pages/admin/AdminUsers'
+// import UserChat from './components/user/UserChat'
+// import AdminUsers from './pages/admin/AdminUsers'
 import { RootState } from './redux/store'
+import Aasample from './components/admin/Aasample'
+import CheckoutPage from './pages/user/CheckoutPage'
+import Error from './components/common/404'
+import UserOrders from './pages/user/UserOrders'
 
 function App() {
-const {adminData}=useSelector((state:RootState)=>state.adminAuth)
-const {userData}=useSelector((state:RootState)=>state.userAuth)
-// const {isAuthenticated}=useAuth0()
+  const { adminData } = useSelector((state: RootState) => state.adminAuth)
+  const { userData } = useSelector((state: RootState) => state.userAuth)
+  // const {isAuthenticated,loginWithRedirect}=useAuth0()
 
 
   return (
@@ -28,20 +32,25 @@ const {userData}=useSelector((state:RootState)=>state.userAuth)
       <BrowserRouter>
         <Routes>
           <Route path='/' element={<HomePage />} />
-          <Route path='/log' element={userData?<HomePage />:<LoginU/>} />
+          <Route path='/log' element={userData ? <HomePage /> : <LoginU />} />
 
           <Route path='/productDetail/:productId' element={<ProductDetailPage />} />
-          <Route path='/cart' element={userData?<CartPage/>:<LoginU/>} />
-          <Route path='/success' element={userData?<OrderSuccessPage/>:<LoginU/>} />
+          <Route path='/cart' element={userData ? <CartPage /> : <LoginU />} />
+          <Route path='/success' element={userData ? <OrderSuccessPage /> : <LoginU />} />
           {/* <Route path='/chat' element={userData?<UserChat/>:<LoginU/>} /> */}
+          <Route path='/checkout' element={userData ? <CheckoutPage /> : <LoginU />} />
+          <Route path='/orders' element={<UserOrders/>} />
 
-          <Route path='/portal/login' element={adminData?<ProductList/>:<Login />} />
-          <Route path='/portal' element={adminData?<ProductList />:<Login />} />
-          <Route path='/portal/addNew' element={adminData?<ProductAdd />:<Login/>} />
-          <Route path='/portal/edit/:productId' element={adminData?<ProductEdit />:<Login/>} />
-          <Route path='/portal/chart' element={adminData?<DashBoardPage/>:<Login/>} />
+
+          <Route path='/a' element={<Aasample />} />
+          <Route path='/portal/login' element={adminData ? <ProductList /> : <Login />} />
+          <Route path='/portal' element={adminData ? <ProductList /> : <Login />} />
+          <Route path='/portal/addNew' element={adminData ? <ProductAdd /> : <Login />} />
+          <Route path='/portal/edit/:productId' element={adminData ? <ProductEdit /> : <Login />} />
+          <Route path='/portal/chart' element={adminData ? <DashBoardPage /> : <Login />} />
           {/* <Route path='/portal/users' element={adminData?<AdminUsers/>:<Login/>} /> */}
 
+          <Route path='*' element={<Error/>} />
         </Routes>
       </BrowserRouter>
 

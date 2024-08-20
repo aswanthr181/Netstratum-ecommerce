@@ -2,7 +2,7 @@ import { useEffect, useState } from "react"
 import { ProductType } from "../../Types/allType"
 import axios from "axios"
 import { Chart } from "chart.js/auto"
-import { Bar, Pie } from 'react-chartjs-2'
+import { Pie } from 'react-chartjs-2'
 import { CategoryScale } from 'chart.js/auto'
 import ChartDataLabels from 'chartjs-plugin-datalabels'
 import Chart1 from "./Chart"
@@ -15,10 +15,10 @@ function Dashboard() {
     const [lineOption, setLineOption] = useState<string>("PRODUCT PRICE")
     const [loading, setLoading] = useState(true);
 
-    const handleType = (e: any) => {
+    const handleType = (e: React.ChangeEvent<HTMLSelectElement>) => {
         setLineOption(e.target.value)
     }
-console.log('opttttt',lineOption);
+    console.log('opttttt', lineOption);
 
     const fetchProducts = async () => {
         try {
@@ -102,29 +102,8 @@ console.log('opttttt',lineOption);
                                 </div>
                             </div>
                             <div className="flex">
-                                
-                                {/* <div class="flex-grow w-1/4 pr-2">
-                    
-                    <select
-                        value={selectedMonth} // Set the value of the select element
-                        onChange={handleMonthChange}
-                        placeholder="PLZ" class=" text-black placeholder-gray-600 w-full px-4 py-2.5 mt-2 text-base   transition duration-500 ease-in-out transform border-transparent rounded-lg bg-gray-200  focus:border-blueGray-500 focus:bg-white dark:focus:bg-white focus:outline-none focus:shadow-outline focus:ring-2 ring-offset-current ring-offset-2 ring-gray-400" >
-                        <option value="" >None</option>
-                        <option value="1" >Januery</option>
-                        <option value="2" >Febreury</option>
-                        <option value="3" >March</option>
-                        <option value="4" >April</option>
-                        <option value="5" >May</option>
-                        <option value="6" >June</option>
-                        <option value="7" >July</option>
-                        <option value="8" >August</option>
-                        <option value="9" >september</option>
-                        <option value="10" >October</option>
-                        <option value="11" >November</option>
-                        <option value="12" >December</option>
-                    </select>
 
-                </div> */}
+
                             </div>
                             {product.length > 0 && !loading && pieChartData &&
                                 <div className="flex flex-col justify-center items-center w-full">
@@ -132,7 +111,7 @@ console.log('opttttt',lineOption);
 
                                         <div className="lg:w-[99%]  mt-4 m-auto  rounded-md  bg-white">
                                             <select onChange={handleType}
-                                             className='w-full px-4 py-2.5 mt-2 bg-gray-100 hover:bg-gray-200 rounded-lg '   >
+                                                className='w-full px-4 py-2.5 mt-2 bg-gray-100 hover:bg-gray-200 rounded-lg '   >
                                                 <option className="bg-gray-100 hover:bg-gray-200" value="PRODUCT PRICE">PRODUCT PRICE</option>
                                                 <option className="bg-gray-100 hover:bg-gray-200" value="PRODUCT RATING">PRODUCT RATING</option>
                                             </select>

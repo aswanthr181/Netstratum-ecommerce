@@ -2,48 +2,46 @@ import axios from "axios"
 import { useState } from "react"
 import Form from "./Form"
 import { useNavigate } from "react-router-dom"
-import { Toaster, toast } from 'react-hot-toast'
-import Swal from 'sweetalert2'
+import { Toaster} from 'react-hot-toast'
+import { productApi } from "../../constants/api"
+import { generateError, Toast } from "../../constants/Alerts"
+
 
 
 function NewProductFrom() {
     const [category, setCategory] = useState<string>('')
     const [title, setTitle] = useState<string>('')
-    const [price, setPrice] = useState<number>(0)
+    const [price, setPrice] = useState<string>('')
     const [description, setDescription] = useState<string>('')
-    const [image, setImage] = useState<any>('')
+    const [image, setImage] = useState<string>('')
 
     const navigate = useNavigate()
-    const base64 = (img: any) => {
-        let reader = new FileReader();
-        reader.readAsDataURL(img)
-        reader.onload = () => {
-            setImage(reader.result);
-        };
-        reader.onerror = (error) => {
-            console.log("Error: ", error);
-        };
+    const handleImageUpload=(img: File)=>{
+        const allowedTypes = ['image/jpeg', 'image/png'];
+        if(allowedTypes.includes(img.type)){
+            setImage(URL.createObjectURL(img))
+        }else{
+            generateError("Please select a valid image")
+        }
     }
+    
 
-    const handleSubmission = async (e: any) => {
+    const handleSubmission = async (e:  React.FormEvent<HTMLFormElement>) => {
+        
         e.preventDefault()
-        if (!description?.trim() || !title?.trim()  ) {
-            alert('enter all fields')
+        console.log(typeof(Number(price)));
+        
+        if (!description?.trim() || !title?.trim() ||!image.trim() || price === undefined || price === null) {
+            generateError("enter all fields")
             return
         }
-        const Toast = Swal.mixin({
-            toast: true,
-            position: "top-right",
-            showConfirmButton: false,
-            timer: 1000,
-            timerProgressBar: true,
-            didOpen: (toast) => {
-                toast.addEventListener("mouseenter", Swal.stopTimer);
-                toast.addEventListener("mouseleave", Swal.resumeTimer);
-            },
-        });
+        if(typeof(Number(price))!=='number'){
+            generateError("enter a valid price")
+            return
+        }
+        
         try {
-            let response = await axios.post(`https://fakestoreapi.com/products`, { title, price, description, image, category })
+            let response = await axios.post(`${productApi}`, { title, price, description, image, category })
             let result = response.data
             console.log(result);
 
@@ -55,19 +53,20 @@ function NewProductFrom() {
                 navigate('/portal')
             }
         } catch (error) {
-            console.log('errorr=>',error);
+            generateError(error+'erer')
+            console.log('errorr=>', error);
 
         }
     }
 
     return (
-        <div className="flex justify-center items-center h-screen ">
+        <div className="flex justify-center  w-full h-screen ">
             <Toaster />
 
-            <div className="flex items-center justify-center p-12 bg-white shadow-lg overflow-y-scroll ">
+            <div className="flex  justify-center w-full bg-white   ">
                 <Form
-                    setTitle={setTitle} setPrice={setPrice} base64={base64} handleSubmission={handleSubmission} setDescription={setDescription}
-                    title={title} price={price} description={description} image={image} />
+                    setTitle={setTitle} setPrice={setPrice} base64={handleImageUpload} handleSubmission={handleSubmission} setDescription={setDescription}
+                    title={title} price={price} description={description} setCategory={setCategory} image={image} />
             </div>
         </div>
     )

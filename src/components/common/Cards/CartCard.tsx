@@ -4,15 +4,15 @@ import { RxCross1 } from "react-icons/rx";
 import { AiFillDelete } from "react-icons/ai";
 import { decrementQuantity, incrementQuantity, removeFromCart } from "../../../redux/cart";
 import Modal from "../Modal";
-import { CartItem } from "../../../Types/allType";
+import { CartItem, orderDetailsType } from "../../../Types/allType";
 import { RootState } from "../../../redux/store";
 
 
 function CartCard({ item }: { item: CartItem }) {
     const [isModalOpen, setIsModalOpen] = useState<boolean>(false)
-    const modalData={
-        text:"Do you really want to remove this Product from Cart",
-        action:"REMOVE"
+    const modalData = {
+        text: "Do you really want to remove this Product from Cart",
+        action: "REMOVE"
     }
 
     const dispatch = useDispatch()
@@ -76,3 +76,46 @@ function CartCard({ item }: { item: CartItem }) {
 }
 
 export default CartCard
+
+
+interface OrderType{
+    order:orderDetailsType
+}
+
+export function OrderCard({order}:OrderType ) {
+    return (
+        <>
+            <div className="flex flex-wrap items-center gap-y-4 py-6">
+                <div className="w-1/2 sm:w-1/4 lg:w-auto lg:flex-1">
+                    <div className="text-base font-medium text-gray-500 dark:text-gray-400">Order ID:</div>
+                    <div className="mt-1.5 text-base font-semibold text-gray-900 ">
+                        <a href="#" className="hover:underline">#FWB127364372</a>
+                    </div>
+                </div>
+
+                <div className="w-1/2 sm:w-1/4 lg:w-auto lg:flex-1">
+                    <div className="text-base font-medium text-gray-500 dark:text-gray-400">Date:</div>
+                    <div className="mt-1.5 text-base font-semibold text-gray-900 ">{order.date}</div>
+                </div>
+
+                <div className="w-1/2 sm:w-1/4 lg:w-auto lg:flex-1">
+                    <div className="text-base font-medium text-gray-500 dark:text-gray-400">Price:</div>
+                    <div className="mt-1.5 text-base font-semibold text-gray-900 ">$4,756</div>
+                </div>
+
+                <div className="w-1/2 sm:w-1/4 lg:w-auto lg:flex-1">
+                    <div className="text-base font-medium text-gray-500 dark:text-gray-400">Status:</div>
+                    <div className={`${order.status==='ordered'&&'text-green-300 bg-green-900'} ${order.status==='canceled' && 'bg-red-900 text-red-300'} me-2 mt-1.5 inline-flex items-center rounded bg-primary-100 px-2.5 py-0.5 text-xs font-medium text-primary-800`} >
+
+                       {order.status}
+                    </div>
+                </div>
+
+                <div className="w-full grid sm:grid-cols-2 lg:flex lg:w-64 lg:items-center lg:justify-end gap-4">
+                    <button type="button" className="w-full rounded-lg border border-red-700 px-3 py-2 text-center text-sm font-medium text-red-700 hover:bg-red-700 hover:text-white focus:outline-none focus:ring-4 focus:ring-red-300 dark:border-red-500 dark:text-red-500 dark:hover:bg-red-600 dark:hover:text-white dark:focus:ring-red-900 lg:w-auto">Cancel order</button>
+                    <a href="#" className="w-full inline-flex justify-center rounded-lg  border border-gray-200 bg-white px-3 py-2 text-sm font-medium text-gray-900 hover:bg-gray-100 hover:text-primary-700 focus:z-10 focus:outline-none focus:ring-4 focus:ring-gray-100 lg:w-auto">View details</a>
+                </div>
+            </div>
+        </>
+    )
+}

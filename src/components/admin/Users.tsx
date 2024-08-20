@@ -2,6 +2,8 @@ import { useSelector } from "react-redux"
 import Chat from "../common/Chat"
 import { useEffect, useState } from "react"
 import { io } from "socket.io-client"
+import { RootState } from "../../redux/store"
+import {  UserCart } from "../../Types/allType"
 const socket = io('ws://localhost:3000')
 type MessageType = {
     text: string;
@@ -13,13 +15,13 @@ type MessageType = {
 function Users() {
     const [message, setMessage] = useState<string>('')
     const [messages, setMessages] = useState<MessageType[]>([])
-    const { cartList } = useSelector((state: any) => state.cart)
+    const { cartList } = useSelector((state: RootState) => state.cart)
     const [user, setUser] = useState<string>('')
-    const { adminData } = useSelector((state: any) => state.adminAuth)
+    const { adminData } = useSelector((state: RootState) => state.adminAuth)
 
     let chatData = {
         sender: 'admin',
-        pic: adminData.picture
+        pic: adminData?.picture
     }
 
     const selectChat = (email: string) => {
@@ -77,12 +79,10 @@ function Users() {
                                             Name
                                         </div>
                                     </th>
-
-
                                 </tr>
                             </thead>
                             <tbody role="rowgroup" className="px-4">
-                                {cartList.map((cart: any, i: number) => {
+                                {cartList.map((cart: UserCart, i: number) => {
                                     return (
                                         <tr key={i} role="row" className={`${cart.user === user ? 'bg-slate-400 ' : ''}`}>
                                             <td onClick={() => selectChat(cart.user)} className="py-3 text-sm rounded-xl" role="cell">

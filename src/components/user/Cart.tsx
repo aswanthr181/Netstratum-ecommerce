@@ -23,9 +23,7 @@ function Cart() {
     }, [cartList])
 
     const handlePlaceOrder = () => {
-        setTimeout(() => {
-            navigate('/success')
-        }, 500)
+            navigate('/checkout')
     }
 
     return (
@@ -72,7 +70,7 @@ function Cart() {
                                     <div className="mt-6 text-center">
                                         <button onClick={handlePlaceOrder}
                                             type="button" className="group inline-flex w-full items-center justify-center rounded-md bg-orange-500 px-6 py-4 text-lg font-semibold text-white transition-all duration-200 ease-in-out focus:shadow hover:bg-gray-800">
-                                            Place Order
+                                            Checkout
                                             <svg xmlns="http://www.w3.org/2000/svg" className="group-hover:ml-8 ml-4 h-6 w-6 transition-all" fill="none" viewBox="0 0 24 24" stroke="currentColor" >
                                                 <path  d="M13 7l5 5m0 0l-5 5m5-5H6" />
                                             </svg>

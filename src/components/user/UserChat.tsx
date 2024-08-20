@@ -3,6 +3,7 @@ import { io } from "socket.io-client"
 import Chat from '../common/Chat'
 import { useSelector } from 'react-redux'
 import Navbar from '../common/Navbar'
+import { RootState } from '../../redux/store'
 
 const socket = io('ws://localhost:3000')
 type MessageType = {
@@ -17,13 +18,13 @@ function UserChat() {
     const [messages, setMessages] = useState<MessageType[]>([])
     const [showChat, setShowChat] = useState<boolean>(false)
 
-    const { userData } = useSelector((state: any) => state.userAuth)
+    const { userData } = useSelector((state: RootState) => state.userAuth)
     const chatData = {
         sender: 'user',
-        pic: userData.picture
+        pic: userData?.picture
     }
     const handleJoinRoom = () => {
-        const room = userData.email;
+        const room = userData?.email;
         socket.emit('joinRoom', room);
         setShowChat(true)
     }
@@ -59,7 +60,7 @@ function UserChat() {
         <>
             <Navbar/>
             {showChat ?
-                <Chat message={message} messages={messages} setMessage={setMessage} sendMessage={sendMessage} chatData={chatData} user={userData.email} />
+                <Chat message={message} messages={messages} setMessage={setMessage} sendMessage={sendMessage} chatData={chatData} user={userData?.email} />
                 : <div>
                     {/* <button onClick={handleJoinRoom}>
                     chat</button> */}

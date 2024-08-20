@@ -1,4 +1,5 @@
 import { useParams } from "react-router-dom"
+
 import AdminNavbar from "../../components/admin/AdminNavbar"
 import ProductForm from "../../components/admin/ProductForm"
 // import { useEffect, useState } from "react"
@@ -9,7 +10,7 @@ function ProductEdit() {
   
   return (
   <>    
-     <div className='flex h-screen overflow-y-scroll'>
+     <div className='flex-row md:flex h-screen overflow-y-scroll'>
       <AdminNavbar/>
       <ProductForm id={productId}/>
      </div>
