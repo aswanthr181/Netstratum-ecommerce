@@ -30,7 +30,7 @@ function AdminNavbar() {
   return (
 
     <>
-      <div className="sticky left-4 top-4 bg-gradient-to-br from-gray-800 to-gray-900   my-4 ml-4 md:h-[calc(100vh-32px)]  md:min-w-72 rounded-xl transition-transform duration-300 translate-x-0">
+      <div className="sticky z-10  sm:left-4 top-4 bg-gradient-to-br from-gray-800 to-gray-900   my-4 sm:ml-4 md:h-[calc(100vh-32px)]  md:min-w-72 rounded-xl transition-transform duration-300 translate-x-0">
         <div className="hidden md:block  relative border-b border-white/20">
           <a className="flex items-center gap-4 py-6 px-8" href="#/">
             <h6 className="hidden lg:block   text-base font-semibold leading-relaxed text-white">ADMIN PORTAL</h6>
@@ -54,7 +54,7 @@ function AdminNavbar() {
             ))}
           </ul>
 
-          <ul className="mb-4 md:mt-0 mt-4 flex md:flex-col gap-1">
+          <ul className="mb-4 md:mt-0 mt-3 flex md:flex-col gap-1">
             <li className="mx-3.5 mt-4 mb-2">
               <p className="hidden md:block antialiased font-sans text-sm leading-normal text-white font-black uppercase opacity-75">auth pages</p>
             </li>
@@ -64,14 +64,14 @@ function AdminNavbar() {
                   <img
                     className="h-6 w-6 rounded-full"
                     src={adminData ? adminData.picture : "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQGlZkIqki43f4vMGa-DljqZBCOr6D6Cm_l_kDM06YEjL2QWlKZY_glSuSJGybsUIHmdpc&usqp=CAU"} alt="no" />
-                  <p className="hidden md:block antialiased font-sans text-base leading-relaxed text-inherit font-medium capitalize">sign in as user</p>
-                  <span className=" absolute  left-1/2 transform -translate-x-1/2  hidden group-hover:block md:group-hover:hidden sm:block md:hidden px-2 py-1 text-xs text-white bg-black rounded-md">
+                  <p className="hidden md:block antialiased font-sans text-base leading-relaxed text-inherit font-medium capitalize">User Login</p>
+                  {/* <span className=" absolute  left-1/2 transform -translate-x-1/2  hidden group-hover:block md:group-hover:hidden sm:block md:hidden px-2 py-1 text-xs text-white bg-black rounded-md">
                     User Login
-                  </span>
+                  </span> */}
                 </button>
               </div>
             </li>
-            <li>
+            <li className="md:mt-0 mt-1">
               <div className="relative group">
                 <button onClick={exit} className="middle none font-sans font-bold center transition-all disabled:opacity-50 disabled:shadow-none disabled:pointer-events-none text-xs py-3 rounded-lg text-white hover:bg-white/10 active:bg-white/30 w-full flex items-center  gap-4 px-4 capitalize" type="button">
                   <FaSignOutAlt className="h-4 w-4 mr-1 ml-1" />

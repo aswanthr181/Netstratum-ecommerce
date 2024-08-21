@@ -100,13 +100,12 @@ export function OrderCard({order}:OrderType ) {
 
                 <div className="w-1/2 sm:w-1/4 lg:w-auto lg:flex-1">
                     <div className="text-base font-medium text-gray-500 dark:text-gray-400">Price:</div>
-                    <div className="mt-1.5 text-base font-semibold text-gray-900 ">$4,756</div>
+                    <div className="mt-1.5 text-base font-semibold text-gray-900 ">${order.total}</div>
                 </div>
 
                 <div className="w-1/2 sm:w-1/4 lg:w-auto lg:flex-1">
                     <div className="text-base font-medium text-gray-500 dark:text-gray-400">Status:</div>
                     <div className={`${order.status==='ordered'&&'text-green-300 bg-green-900'} ${order.status==='canceled' && 'bg-red-900 text-red-300'} me-2 mt-1.5 inline-flex items-center rounded bg-primary-100 px-2.5 py-0.5 text-xs font-medium text-primary-800`} >
-
                        {order.status}
                     </div>
                 </div>
