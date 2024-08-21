@@ -30,14 +30,14 @@ function AdminNavbar() {
   return (
 
     <>
-      <div className="sticky z-10  sm:left-4 top-4 bg-gradient-to-br from-gray-800 to-gray-900   my-4 sm:ml-4 md:h-[calc(100vh-32px)]  md:min-w-72 rounded-xl transition-transform duration-300 translate-x-0">
+      <div className="sticky z-10  sm:left-4 top-4 bg-gradient-to-br from-gray-800 to-gray-900   my-4 sm:ml-4 md:h-[calc(100vh-32px)]  md:min-w-72 md:rounded-xl rounded-full transition-transform duration-300 translate-x-0 ">
         <div className="hidden md:block  relative border-b border-white/20">
           <a className="flex items-center gap-4 py-6 px-8" href="#/">
             <h6 className="hidden lg:block   text-base font-semibold leading-relaxed text-white">ADMIN PORTAL</h6>
           </a>
 
         </div>
-        <div className="m-4 mt-4 flex justify-between md:flex-col">
+        <div className="m-4 ml-3 mt-4 flex justify-between md:flex-col ">
           <ul className="mb-4 md:mt-0 mt-4 flex md:flex-col  gap-1">
             {sideBar.map((item, i) => (
               <li key={i}>
@@ -54,7 +54,7 @@ function AdminNavbar() {
             ))}
           </ul>
 
-          <ul className="mb-4 md:mt-0 mt-3 flex md:flex-col gap-1">
+          <ul className="mb-4 md:mt-0 mt-3 flex md:flex-col gap-0 sm:gap-1  flex-shrink-0 overflow-hidden">
             <li className="mx-3.5 mt-4 mb-2">
               <p className="hidden md:block antialiased font-sans text-sm leading-normal text-white font-black uppercase opacity-75">auth pages</p>
             </li>
@@ -71,7 +71,7 @@ function AdminNavbar() {
                 </button>
               </div>
             </li>
-            <li className="md:mt-0 mt-1">
+            <li className="md:mt-0 mt-1 ml-0">
               <div className="relative group">
                 <button onClick={exit} className="middle none font-sans font-bold center transition-all disabled:opacity-50 disabled:shadow-none disabled:pointer-events-none text-xs py-3 rounded-lg text-white hover:bg-white/10 active:bg-white/30 w-full flex items-center  gap-4 px-4 capitalize" type="button">
                   <FaSignOutAlt className="h-4 w-4 mr-1 ml-1" />
